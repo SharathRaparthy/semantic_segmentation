@@ -201,7 +201,7 @@ class UNet(nn.Module):
         return x
 
 
-model = UNet(3, depth=4, merge_mode='concat')
-var = torch.randn(1,3,360,640)
-out = model(var)
-print(out.size())
+# model = UNet(3, depth=4, merge_mode='concat')
+# var = torch.randn(1,3,360,640)
+# out = model(var)
+# print(out.size())

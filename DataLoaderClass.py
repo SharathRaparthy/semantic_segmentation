@@ -12,19 +12,16 @@ class DataLoaderClass(data.Dataset):
         super(DataLoaderClass, self).__init__()
         self.transforms = transforms
         self.path = path
-        self.path_input = os.path.join(path, 'dataset_1')
+        self.path_input = os.path.join(path, 'Images')
+        self.path_output = os.path.join(path, 'GroundTruth')
         self.datafile = datafile
         self.df = pd.read_csv(os.path.join(path, datafile))
     def __len__(self):
         return len(self.df)
     def __getitem__(self, idx):
-        image_input = Image.open(os.path.join(self.path_input, self.df.iloc[idx,0]))
+        image_input = Image.open(os.path.join(self.path_input, self.df.iloc[idx,0])).resize((224,224))
         image_input = self.transforms(image_input)
+        image_output = Image.open(os.path.join(self.path_output, self.df.iloc[idx,0])).resize((224,224))
+        image_output = self.transforms(image_output)
 
-        return image_input
-transforms = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.5,0.5,0.5),(0.5, 0.5, 0.5))])
-data = DataLoaderClass('/home/sharath/gym_duckietown','/home/sharath/semantic_segmentation/data.csv',transforms = transforms)
-data = torch.utils.data.DataLoader(data, batch_size = 64)
-
-for i in data:
-    print(i)
+        return (image_input, image_output)
